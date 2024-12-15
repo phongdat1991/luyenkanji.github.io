@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanji Writing Practice</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+        main {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 900px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+        input[type="text"] {
+            width: 80px;
+            height: 50px;
+            font-size: 1.8rem;
+            text-align: center;
+            border: 2px solid #4CAF50;
+            border-radius: 4px;
+            outline: none;
+            margin: 10px;
+        }
+        input[type="text"]:focus {
+            border-color: #388E3C;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #388E3C;
+        }
+        .grid-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(15, 1fr);
+            gap: 4px;
+            margin: 20px auto;
+            page-break-inside: avoid;
+            justify-items: center;
+        }
+        .grid div {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #ddd;
+            font-size: 1.5rem;
+            color: rgba(0, 0, 0, 0.2);
+            background-color: #fafafa;
+            cursor: pointer;
+        }
+        .grid div.bold {
+            color: black;
+            font-weight: bold;
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #kanjiContainer, #kanjiContainer * {
+                visibility: visible;
+            }
+            #kanjiContainer {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+        }
+        footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #777;
+            margin-top: 20px;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Luyện Viết Kanji</h1>
+    </header>
+    <main>
+        <p>Nhập chữ Kanji bạn muốn luyện:</p>
+        <input type="text" id="kanjiInput" maxlength="1" placeholder="漢" autofocus>
+        <button onclick="addKanjiGrid()">Thêm Kanji</button>
+        <div id="kanjiContainer"></div>
+        <button onclick="window.print()" style="margin-top: 20px;">In Trang</button>
+    </main>
+    <footer>
+        &copy; 2024 Luyện Viết Kanji | Designed with ❤️ by Dat9x
+    </footer>
+    <script>
+        function addKanjiGrid() {
+            const kanji = document.getElementById('kanjiInput').value;
+            const container = document.getElementById('kanjiContainer');
+
+            if (kanji.trim() === '') {
+                alert('Vui lòng nhập một chữ Kanji.');
+                return;
+            }
+
+            // Tạo container cho grid
+            const gridContainer = document.createElement('div');
+            gridContainer.classList.add('grid-container');
+
+            // Tạo grid cho chữ Kanji
+            const grid = document.createElement('div');
+            grid.classList.add('grid');
+
+            for (let i = 0; i < 15; i++) {
+                const cell = document.createElement('div');
+                cell.textContent = kanji;
+                if (i === 0) {
+                    cell.classList.add('bold'); // Chữ nét đậm ở ô đầu tiên
+                }
+                grid.appendChild(cell);
+            }
+
+            // Gắn grid vào container
+            gridContainer.appendChild(grid);
+            container.appendChild(gridContainer);
+
+            // Xóa nội dung ô nhập
+            document.getElementById('kanjiInput').value = '';
+            document.getElementById('kanjiInput').focus();
+
+            // Thêm sự kiện click đúp vào chữ Kanji bôi đậm
+            const boldCells = grid.querySelectorAll('.bold');
+            boldCells.forEach(cell => {
+                cell.addEventListener('dblclick', function() {
+                    const confirmDelete = confirm("Bạn có chắc muốn xóa dòng này?");
+                    if (confirmDelete) {
+                        container.removeChild(gridContainer);
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>
